@@ -1,0 +1,12 @@
+1. Requests的使用
+requests.get(url)返回网页html的response
+2. BeautifulSoup的使用
+Beautiful soup()可以对requests.get.text的文本信息进行美化处理
+4. bs中select()函数的使用
+在浏览器中选择copy selector 来选取目标
+通过父级标签来选取目标
+通过标签的唯一属性来选取目标
+5. 代码首两行加入shebang
+#!/usr/bin/env python
+# -*- coding: utf-8 -*	
+6.lmxl解析可以替换为html.parser
