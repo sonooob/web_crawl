@@ -7,7 +7,10 @@ import pymongo
 
 client = pymongo.MongoClient('localhost',27017) #连接mongodb
 zufang = client['zufang'] #创建数据库
-sheet_tab = zufang['sheet_tab2'] #创建一个sheet
+sheet_tab = zufang['sheet_tab'] #创建一个sheet
+if sheet_tab is not None:
+    sheet_tab.remove()
+
 
 urls = ['http://bj.xiaozhu.com/search-duanzufang-p{}-0/'.format(str(i)) for i in range(1,4)]
 
@@ -17,7 +20,7 @@ headers = {
 }
 
 def get_info(url):
-    wb_data = requests.get(url)
+    wb_data = requests.get(url, headers = headers)
     time.sleep(2)
     soup = BeautifulSoup(wb_data.text, 'lxml')
     titles = soup.select('div.result_intro > a')
@@ -36,6 +39,6 @@ for url in urls:
 for item in sheet_tab.find({'price':{'$gt':500}}):
     print(item)
 
-
+print(sheet_tab.count())
 
 
