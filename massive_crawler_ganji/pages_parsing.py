@@ -26,7 +26,7 @@ def get_links_from(channel, pages):
             item_link = link.get('href')
             if 'bj.ganji.com' in item_link.split('/'):
                 url_list.insert_one({'url': item_link})
-                #print(item_link)
+                print(item_link)
                 #return urls
     else:
         # It's the last page !
@@ -47,8 +47,8 @@ def get_item_info(url):
         area_t.append(area.text)#将多个区域标签放入一个List里
     quality = soup.select('ul.second-det-infor.clearfix > li')[0].text.split('\n')[1].strip()
 
-    item_info.insert_one({'title': title, 'price': price, 'date': date, 'area': area_t, 'cate': cate, 'quality': quality})
-    #print({'title': title, 'price': price, 'date': date, 'cate': cate, 'area': area_t, 'quality': quality})
+    item_info.insert_one({'title': title, 'price': price, 'date': date, 'area': area_t, 'cate': cate, 'quality': quality, 'url': url})
+    print({'title': title, 'price': price, 'date': date, 'cate': cate, 'area': area_t, 'quality': quality})
 
 #get_item_info('http://bj.ganji.com/jiaju/1890423960x.htm')
 
