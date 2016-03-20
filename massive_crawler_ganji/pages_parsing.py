@@ -24,7 +24,7 @@ def get_links_from(channel, pages):
     wb_data = requests.get(list_view,headers=header)
     time.sleep(1)
     soup = BeautifulSoup(wb_data.text, 'lxml')
-    if soup.find('ul', 'pageLink clearfix'):
+    if soup.find('ul', 'pageLink'):
         for link in soup.select('li.js-item > a'):
             item_link = link.get('href')
             if 'bj.ganji.com' in item_link.split('/'):
@@ -39,20 +39,28 @@ def get_links_from(channel, pages):
 #spider 2
 def get_item_info(url):
     wb_data = requests.get(url, headers=header)
-    soup = BeautifulSoup(wb_data.text, 'lxml')
-    title = soup.select('h1.title-name')[0].get_text() if soup.select('h1.title-name') else None
-    price = soup.select('.f22.fc-orange.f-type')[0].text if  soup.select('.f22.fc-orange.f-type') else None
-    date = soup.select('i.pr-5')[0].text.strip().split(u'\xa0')[0] if soup.select('i.pr-5') else None
-    cate = soup.select('#wrapper > div.content.clearfix > div.leftBox > div:nth-of-type(3) > div > ul > li:nth-of-type(1) > span > a')[0].text if soup.select('#wrapper > div.content.clearfix > div.leftBox > div:nth-of-type(3) > div > ul > li:nth-of-type(1) > span > a') else None
-    areas = soup.select('#wrapper > div.content.clearfix > div.leftBox > div:nth-of-type(3) > div > ul > li:nth-of-type(3) > a ')
-    area_t = []
-    if soup.select('#wrapper > div.content.clearfix > div.leftBox > div:nth-of-type(3) > div > ul > li:nth-of-type(3) > a '):
-        for area in areas:
-            area_t.append(area.text)#将多个区域标签放入一个List里
-    quality = soup.select('ul.second-det-infor.clearfix > li')[0].get_text()[16:].strip() if soup.select('ul.second-det-infor.clearfix > li') else None
+    try:
+        if wb_data.status_code == 200:
+            soup = BeautifulSoup(wb_data.text, 'lxml')
+            title = soup.select('h1.title-name')[0].get_text() if soup.select('h1.title-name') else None
+            price = soup.select('.f22.fc-orange.f-type')[0].text if  soup.select('.f22.fc-orange.f-type') else None
+            date = soup.select('i.pr-5')[0].text.strip().split(u'\xa0')[0] if soup.select('i.pr-5') else None
+            cate = soup.select('#wrapper > div.content.clearfix > div.leftBox > div:nth-of-type(3) > div > ul > li:nth-of-type(1) > span > a')[0].text if soup.select('#wrapper > div.content.clearfix > div.leftBox > div:nth-of-type(3) > div > ul > li:nth-of-type(1) > span > a') else None
+            areas = soup.select('#wrapper > div.content.clearfix > div.leftBox > div:nth-of-type(3) > div > ul > li:nth-of-type(3) > a ')
+            area_t = []
+            if soup.select('#wrapper > div.content.clearfix > div.leftBox > div:nth-of-type(3) > div > ul > li:nth-of-type(3) > a '):
+                for area in areas:
+                    area_t.append(area.text)#将多个区域标签放入一个List里
+            quality = soup.select('ul.second-det-infor.clearfix > li')[0].get_text()[16:].strip() if soup.select('ul.second-det-infor.clearfix > li') else None
 
-    item_info.insert_one({'title': title, 'price': price, 'date': date, 'area': area_t, 'cate': cate, 'quality': quality, 'url': url})
-    print({'title': title, 'price': price, 'date': date, 'cate': cate, 'area': area_t, 'quality': quality})
+            item_info.insert_one({'title': title, 'price': price, 'date': date, 'area': area_t, 'cate': cate, 'quality': quality, 'url': url})
+            print({'title': title, 'price': price, 'date': date, 'cate': cate, 'area': area_t, 'quality': quality, 'url':url})
+        else:
+            print('connection error')
+    except UnicodeEncodeError:
+        pass
 
-#get_item_info('http://bj.ganji.com/jiaju/1890423960x.htm')
 
+get_item_info('http://bj.ganji.com/laonianyongpin/1779112251x.htm')
+
+#get_links_from('http://bj.ganji.com/jiaju/',20)

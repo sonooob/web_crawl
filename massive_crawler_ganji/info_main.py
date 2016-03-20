@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from multiprocessing import Pool
-from channel_extact import channel_list
 from pages_parsing import get_links_from,url_list,get_item_info,item_info
 
 db_urls = [item['url'] for item in url_list.find()]
@@ -12,5 +10,5 @@ y = set(index_urls)
 rest_of_urls = x-y
 
 if __name__ == '__main__':
-    pool = Pool()
+    pool = Pool(processes=4)
     pool.map(get_item_info,rest_of_urls)
