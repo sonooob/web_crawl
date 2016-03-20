@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from bs4 import BeautifulSoup
 import requests
 
@@ -12,9 +15,9 @@ def get_index_url(url):
     links = soup.select('dl.fenlei > dt > a')
     for link in links:
         page_url = url_host + link.get('href')
-        print(page_url)
+        #print(page_url)
 
-get_index_url(start_url)
+#get_index_url(start_url)
 
 channel_list = '''
 http://bj.ganji.com/jiaju/
